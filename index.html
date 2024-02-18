@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Fetch Data Example</title>
+    <link rel="stylesheet" href="stylesheet.css">
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let fetchButton = document.getElementById("fetchButton");
+            let buttonPressed = false;
+            fetchButton.addEventListener('click', function () {
+                if (!buttonPressed){
+                    buttonPressed = true;
+                    const inputField = document.getElementById("textInput");
+                fetchButton.disabled = true;
+                fetch('/data', {
+                    body: inputField.value,
+                    method: 'POST',
+                    // add input from input field
+                    
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+
+                    })
+                    .then(data => {
+                        let text = data.text[0];
+                        console.log(data); // Handle your data here
+                        document.getElementById('apiResponse').textContent = text;
+                    })
+                    .catch(error => console.error('There has been a problem with your fetch operation:', error));
+                }
+            })
+
+        });
+    </script>
+</head>
+
+<body>
+    <h1>DysNostics</h1>
+    <h2>Make your company dystopia-proof.</h2>
+
+    <div id="row">
+        <div>
+            <input type="text" id="textInput" placeholder="Company Name">
+        </div>
+        <div>
+            <button id="fetchButton">Run Diagnostic</button>
+        </div>
+
+   
+      
+        
+    </div>
+
+    <div id="apiResponse">loading</div>
+    
+</body>
+</html>
